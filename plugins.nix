@@ -1,7 +1,7 @@
 { pkgs, stdenv }:
 
 let
-  mkExtension =
+  mkPlugin =
     {
       name,
       src,
@@ -21,7 +21,7 @@ let
       '';
     };
 
-  mkSingleScriptExtension =
+  mkSingleScriptPlugin =
     {
       name,
       src,
@@ -43,7 +43,7 @@ let
     };
 in
 {
-  lsp = mkExtension {
+  lsp = mkPlugin {
     name = "lite-xl-lsp";
     src = pkgs.fetchFromGitHub {
       owner = "lite-xl";
@@ -54,7 +54,7 @@ in
     targetDir = "lite-xl/plugins/lsp";
   };
 
-  widgets = mkExtension {
+  widgets = mkPlugin {
     name = "lite-xl-widgets";
     src = pkgs.fetchFromGitHub {
       owner = "lite-xl";
@@ -65,7 +65,7 @@ in
     targetDir = "lite-xl/libraries/widget";
   };
 
-  autoinsert = mkSingleScriptExtension {
+  autoinsert = mkSingleScriptPlugin {
     name = "autoinsert";
     src = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/lite-xl/lite-xl-plugins/refs/heads/master/plugins/autoinsert.lua";
@@ -73,7 +73,7 @@ in
     };
   };
 
-  colorpreview = mkSingleScriptExtension {
+  colorpreview = mkSingleScriptPlugin {
     name = "colorpreview";
     src = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/lite-xl/lite-xl-plugins/refs/heads/master/plugins/colorpreview.lua";
@@ -81,7 +81,7 @@ in
     };
   };
 
-  code-plus = mkExtension {
+  code-plus = mkPlugin {
     name = "code-plus";
     src = pkgs.fetchFromGitHub {
       owner = "chqs-git";
@@ -91,7 +91,7 @@ in
     };
   };
 
-  console = mkExtension {
+  console = mkPlugin {
     name = "console";
     src = pkgs.fetchFromGitHub {
       owner = "lite-xl";
@@ -101,7 +101,7 @@ in
     };
   };
 
-  gitstatus = mkSingleScriptExtension {
+  gitstatus = mkSingleScriptPlugin {
     name = "gitstatus";
     src = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/lite-xl/lite-xl-plugins/refs/heads/master/plugins/gitstatus.lua";
@@ -109,7 +109,7 @@ in
     };
   };
 
-  gitblame = mkExtension rec {
+  gitblame = mkPlugin rec {
     name = "gitblame";
     src = pkgs.fetchFromGitHub {
       owner = "juliardi";

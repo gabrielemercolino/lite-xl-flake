@@ -7,24 +7,24 @@
 let
   cfg = config.programs.lite-xl;
 
-  generateExtensions =
-    exts:
+  generatePlugins =
+    plugins:
     builtins.foldl' (
-      acc: ext:
+      acc: plugin:
       let
-        directory = ext.passthru.targetDir;
+        directory = plugin.passthru.targetDir;
       in
       acc
       // {
         ${directory} = {
-          source = "${ext}/share/${ext.name}";
+          source = "${plugin}/share/${plugin.name}";
           recursive = true;
         };
       }
-    ) { } exts;
+    ) { } plugins;
 
   generateLspServers =
-    servers:
+    lspServers:
     builtins.foldl' (
       acc: lspServer:
       let
@@ -36,20 +36,20 @@ let
           source = "${lspServer}/share/${lspServer.name}_lsp.lua";
         };
       }
-    ) { } servers;
+    ) { } lspServers;
 in
 {
   options.programs.lite-xl = {
     enable = lib.mkEnableOption "lite-xl";
 
-    extensions = lib.mkOption {
+    plugins = lib.mkOption {
       type = with lib.types; listOf package;
       default = [ ];
-      example = with pkgs.lite-xl-extensions; [
+      example = with pkgs.lite-xl-plugins; [
         lsp
         widgets
       ];
-      description = "The extensions to add";
+      description = "The plugins to add";
     };
 
     lspServers = lib.mkOption {
@@ -64,7 +64,7 @@ in
     home.packages = [ pkgs.lite-xl ];
 
     xdg.configFile = lib.mkMerge [
-      (generateExtensions cfg.extensions)
+      (generatePlugins cfg.plugins)
       (generateLspServers cfg.lspServers)
     ];
 
