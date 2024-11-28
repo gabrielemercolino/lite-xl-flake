@@ -6,17 +6,18 @@ let
       name,
       src,
       targetDir ? "lite-xl/plugins/${name}",
+      postInstall ? "",
     }:
     stdenv.mkDerivation rec {
-      inherit name src;
+      inherit name src postInstall;
 
       passthru.targetDir = targetDir;
 
-      phases = [ "installPhase" ];
-
       installPhase = ''
         mkdir -p $out/share/${name}
-        ln -s $src/* $out/share/${name}
+        cp -r $src/* $out/share/${name}
+
+        runHook postInstall
       '';
     };
 
@@ -25,17 +26,19 @@ let
       name,
       src,
       targetDir ? "lite-xl/plugins/${name}",
+      postInstall ? "",
     }:
     stdenv.mkDerivation rec {
-      inherit name src;
+      inherit name src postInstall;
+      dontUnpack = true;
 
       passthru.targetDir = targetDir;
 
-      phases = [ "installPhase" ];
-
       installPhase = ''
         mkdir -p $out/share/${name}
-        ln -s $src $out/share/${name}/init.lua
+        cp $src $out/share/${name}/init.lua
+
+        runHook postInstall
       '';
     };
 in
@@ -104,6 +107,20 @@ in
       url = "https://raw.githubusercontent.com/lite-xl/lite-xl-plugins/refs/heads/master/plugins/gitstatus.lua";
       sha256 = "sha256-i4ZSjFXcqMGsABJac4movtnDY6BZ0m7xa1cnAa3VSoE=";
     };
+  };
+
+  gitblame = mkExtension rec {
+    name = "gitblame";
+    src = pkgs.fetchFromGitHub {
+      owner = "juliardi";
+      repo = "lite-xl-gitblame";
+      rev = "main";
+      sha256 = "sha256-1/2FAsCH/qJP7LV5bnLkcTpRzAYhF/QEvzjuZJDOdsc=";
+    };
+    postInstall = ''
+      substituteInPlace $out/share/${name}/init.lua \
+      --replace-fail "/usr/bin/git" "${pkgs.git}/bin/git"
+    '';
   };
 
 }
