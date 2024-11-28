@@ -19,12 +19,12 @@
     in
     {
       overlay = final: prev: {
-        lite-xl-extensions = final.callPackage ./extensions.nix { };
+        lite-xl-plugins = final.callPackage ./extensions.nix { };
         lite-xl-lsp = pkgs.callPackage ./lspServers.nix { };
       };
 
       packages.${system} = {
-        lite-xl-extensions = pkgs.callPackage ./extensions.nix { };
+        lite-xl-plugins = pkgs.callPackage ./extensions.nix { };
         lite-xl-lsp = pkgs.callPackage ./lspServers.nix { };
       };
 
