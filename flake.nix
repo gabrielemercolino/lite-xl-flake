@@ -20,7 +20,7 @@
     {
       overlay = final: prev: {
         lite-xl-plugins = final.callPackage ./extensions.nix { };
-        lite-xl-lsp = pkgs.callPackage ./lspServers.nix { };
+        lite-xl-lsp = final.callPackage ./lspServers.nix { };
       };
 
       packages.${system} = {
