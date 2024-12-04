@@ -54,6 +54,12 @@ let
         };
       }
     ) { } syntaxes;
+
+  generateConfig = extraConfig: {
+    "lite-xl/init.lua" = {
+      text = extraConfig;
+    };
+  };
 in
 {
   options.programs.lite-xl = {
@@ -75,6 +81,11 @@ in
       example = with pkgs.lite-xl-lsp; [ rust_analyzer ];
       description = "The lsp servers to add";
     };
+
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = '''';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -84,6 +95,7 @@ in
       (generatePlugins cfg.plugins)
       (generateLspServers cfg.lspServers)
       (generateSyntaxes syntaxes)
+      (generateConfig cfg.extraConfig)
     ];
 
   };
