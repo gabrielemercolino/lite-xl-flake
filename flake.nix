@@ -29,13 +29,7 @@
       };
 
       homeManagerModules = {
-        lite-xl =
-          { config, pkgs, ... }:
-          {
-            imports = [
-              ./module.nix
-            ];
-          };
+        lite-xl = import ./module.nix;
         default = self.homeManagerModules.lite-xl;
       };
     };
