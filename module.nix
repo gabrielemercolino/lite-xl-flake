@@ -7,7 +7,13 @@
 let
   cfg = config.programs.lite-xl;
 
-  syntaxes = pkgs.callPackage ./syntaxes.nix { };
+  syntaxes = import ./syntaxes.nix { inherit pkgs; };
+  syntaxesList = builtins.attrValues (
+    builtins.mapAttrs (name: derivation: {
+      source = "${derivation}/share/syntax.lua";
+      target = "lite-xl/plugins/syntax_${name}.lua";
+    }) syntaxes
+  );
 
   generatePlugins =
     plugins:
@@ -44,14 +50,9 @@ let
     syntaxes:
     builtins.foldl' (
       acc: syntax:
-      let
-        fileName = "lite-xl/plugins/${syntax.name}_syntax.lua";
-      in
       acc
       // {
-        ${fileName} = {
-          source = "${syntax}/share/${syntax.name}_syntax.lua";
-        };
+        ${syntax.target}.source = syntax.source;
       }
     ) { } syntaxes;
 
@@ -94,7 +95,7 @@ in
     xdg.configFile = lib.mkMerge [
       (generatePlugins cfg.plugins)
       (generateLspServers cfg.lspServers)
-      (generateSyntaxes syntaxes)
+      (generateSyntaxes syntaxesList)
       (generateConfig cfg.extraConfig)
     ];
 
