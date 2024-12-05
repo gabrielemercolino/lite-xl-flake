@@ -57,9 +57,8 @@ let
     ) { } syntaxes;
 
   generateConfig = extraConfig: {
-    "lite-xl/init.lua" = {
-      text = extraConfig;
-    };
+    "lite-xl/init.lua" =
+      if extraConfig == "" then { source = ./static/init.lua; } else { text = extraConfig; };
   };
 in
 {
