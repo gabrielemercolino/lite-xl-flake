@@ -1,13 +1,13 @@
-{ pkgs, stdenv }:
-
-let
-  mkPlugin =
-    {
-      name,
-      src,
-      targetDir ? "lite-xl/plugins/${name}",
-      postInstall ? "",
-    }:
+{
+  pkgs,
+  stdenv,
+}: let
+  mkPlugin = {
+    name,
+    src,
+    targetDir ? "lite-xl/plugins/${name}",
+    postInstall ? "",
+  }:
     stdenv.mkDerivation rec {
       inherit name src postInstall;
 
@@ -21,13 +21,12 @@ let
       '';
     };
 
-  mkSingleScriptPlugin =
-    {
-      name,
-      src,
-      targetDir ? "lite-xl/plugins/${name}",
-      postInstall ? "",
-    }:
+  mkSingleScriptPlugin = {
+    name,
+    src,
+    targetDir ? "lite-xl/plugins/${name}",
+    postInstall ? "",
+  }:
     stdenv.mkDerivation rec {
       inherit name src postInstall;
       dontUnpack = true;
@@ -41,15 +40,14 @@ let
         runHook postInstall
       '';
     };
-in
-{
+in {
   lsp = mkPlugin {
     name = "lite-xl-lsp";
     src = pkgs.fetchFromGitHub {
       owner = "lite-xl";
       repo = "lite-xl-lsp";
       rev = "master";
-      sha256 = "sha256-IOjQvWKrt/jUFPCU7T8l8mBSWjYn2CqfVQGVZr9NOTg=";
+      sha256 = "sha256-42F8O7N7l4vQA8D+HgZNokknbWn/U7dv33GDXJ0yrPs=";
     };
     targetDir = "lite-xl/plugins/lsp";
   };
@@ -132,5 +130,4 @@ in
       sha256 = "sha256-qeBy4+7l+YM0buAWYQZOvhco6f3kwKuQxuh1dUBXX74=";
     };
   };
-
 }
