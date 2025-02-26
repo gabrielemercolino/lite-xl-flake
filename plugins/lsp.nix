@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/${name}
-    cp $src $out/share/${name}/init.lua
+    cp -r $src/* $out/share/${name}
   '';
 }
