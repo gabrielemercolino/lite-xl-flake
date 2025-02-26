@@ -3,71 +3,71 @@
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   cfg = config.programs.lite-xl;
 
-  syntaxes = import ./syntaxes.nix { inherit pkgs; };
+  syntaxes = import ./syntaxes.nix {inherit pkgs;};
   syntaxesList = builtins.attrValues (
     builtins.mapAttrs (name: derivation: {
       source = "${derivation}/share/syntax.lua";
       target = "lite-xl/plugins/syntax_${name}.lua";
-    }) syntaxes
+    })
+    syntaxes
   );
 
-  generatePlugins =
-    plugins:
+  generatePlugins = plugins:
     builtins.foldl' (
-      acc: plugin:
-      let
+      acc: plugin: let
+        # TODO: make this less tedious
         directory = plugin.passthru.targetDir;
       in
-      acc
-      // {
-        ${directory} = {
-          source = "${plugin}/share/${plugin.name}";
-          recursive = true;
-        };
-      }
-    ) { } plugins;
+        acc
+        // {
+          ${directory} = {
+            source = "${plugin}/share/${plugin.name}";
+            recursive = true;
+          };
+        }
+    ) {}
+    plugins;
 
-  generateLspServers =
-    lspServers:
+  generateLspServers = lspServers:
     builtins.foldl' (
-      acc: lspServer:
-      let
+      acc: lspServer: let
         fileName = "lite-xl/plugins/${lspServer.name}_lsp.lua";
       in
-      acc
-      // {
-        ${fileName} = {
-          source = "${lspServer}/share/${lspServer.name}_lsp.lua";
-        };
-      }
-    ) { } lspServers;
+        acc
+        // {
+          ${fileName} = {
+            source = "${lspServer}/share/${lspServer.name}_lsp.lua";
+          };
+        }
+    ) {}
+    lspServers;
 
-  generateSyntaxes =
-    syntaxes:
+  generateSyntaxes = syntaxes:
     builtins.foldl' (
       acc: syntax:
-      acc
-      // {
-        ${syntax.target}.source = syntax.source;
-      }
-    ) { } syntaxes;
+        acc
+        // {
+          ${syntax.target}.source = syntax.source;
+        }
+    ) {}
+    syntaxes;
 
   generateConfig = extraConfig: {
     "lite-xl/init.lua" =
-      if extraConfig == "" then { source = ./static/init.lua; } else { text = extraConfig; };
+      if extraConfig == ""
+      then {source = ./static/init.lua;}
+      else {text = extraConfig;};
   };
-in
-{
+in {
   options.programs.lite-xl = {
     enable = lib.mkEnableOption "lite-xl";
 
     plugins = lib.mkOption {
       type = with lib.types; listOf package;
-      default = [ ];
+      default = [];
       example = with pkgs.lite-xl-plugins; [
         lsp
         widgets
@@ -77,8 +77,8 @@ in
 
     lspServers = lib.mkOption {
       type = with lib.types; listOf package;
-      default = [ ];
-      example = with pkgs.lite-xl-lsp; [ rust_analyzer ];
+      default = [];
+      example = with pkgs.lite-xl-lsp; [rust_analyzer];
       description = "The lsp servers to add";
     };
 
@@ -89,7 +89,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ pkgs.lite-xl ];
+    home.packages = [pkgs.lite-xl];
 
     xdg.configFile = lib.mkMerge [
       (generatePlugins cfg.plugins)
@@ -97,7 +97,5 @@ in
       (generateSyntaxes syntaxesList)
       (generateConfig cfg.extraConfig)
     ];
-
   };
-
 }
