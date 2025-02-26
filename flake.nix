@@ -16,12 +16,12 @@
     };
   in {
     overlay = final: prev: {
-      lite-xl-plugins = final.callPackage ./plugins.nix {};
+      lite-xl-plugins = final.callPackage ./plugins {};
       lite-xl-lsp = final.callPackage ./lsp {};
     };
 
     packages.${system} = {
-      lite-xl-plugins = pkgs.callPackage ./plugins.nix {};
+      lite-xl-plugins = pkgs.callPackage ./plugins {};
       lite-xl-lsp = pkgs.callPackage ./lsp {};
     };
 
