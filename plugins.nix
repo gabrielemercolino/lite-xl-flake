@@ -130,4 +130,14 @@ in {
       sha256 = "sha256-qeBy4+7l+YM0buAWYQZOvhco6f3kwKuQxuh1dUBXX74=";
     };
   };
+
+  lintplus = mkPlugin {
+    name = "lintplus";
+    src = pkgs.fetchFromGitHub {
+      owner = "liquidev";
+      repo = "lintplus";
+      rev = "master";
+      sha256 = "sha256-CRfv6eFY4dZ9J937NHK+HE+e7fLkCH+cE6MQgn2OxNg=";
+    };
+  };
 }
