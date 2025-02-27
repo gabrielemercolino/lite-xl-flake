@@ -1,5 +1,6 @@
 {pkgs}: {
   autoinsert = pkgs.callPackage ./autoinsert.nix {};
+  bracketmatch = pkgs.callPackage ./bracketmatch.nix {};
   code-plus = pkgs.callPackage ./code-plus.nix {};
   colorpreview = pkgs.callPackage ./colorpreview.nix {};
   console = pkgs.callPackage ./console.nix {};
