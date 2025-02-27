@@ -6,7 +6,6 @@ stdenv.mkDerivation rec {
   name = "code-plus";
 
   passthru.targetDir = "lite-xl/plugins/${name}";
-  dontUnpack = true;
 
   src = pkgs.fetchFromGitHub {
     owner = "chqs-git";

@@ -6,7 +6,6 @@ stdenv.mkDerivation rec {
   name = "lintplus";
 
   passthru.targetDir = "lite-xl/plugins/${name}";
-  dontUnpack = true;
 
   src = pkgs.fetchFromGitHub {
     owner = "liquidev";
