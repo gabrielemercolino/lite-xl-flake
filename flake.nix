@@ -26,7 +26,7 @@
     };
 
     homeManagerModules = {
-      lite-xl = import ./module.nix;
+      lite-xl = import ./hm/module.nix;
       default = self.homeManagerModules.lite-xl;
     };
   };
