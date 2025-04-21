@@ -36,7 +36,7 @@ in {
     name = "sh";
     src = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/lite-xl/lite-xl-plugins/refs/heads/master/plugins/language_sh.lua";
-      sha256 = "sha256-X2hFUWjPm820TZthhRlegFdCHpQVLdRMo1BUbveiWPI=";
+      sha256 = "sha256-KIZrouCCU8KoezH5yYUBriW3BQza3e0x3ZJE4OzTLpw=";
     };
   };
 }
